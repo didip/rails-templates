@@ -1,6 +1,10 @@
 # mozomo.rb
 # from Didip Kerabat and Quin Hoxie
 
+gem 'rack'
+gem 'haml'
+gem 'less'
+gem 'mocha'
 
 def github_gem(lib_name)
   gem lib_name, :lib => lib_name.match(/[^-]+-(.*)/)[1], :source => 'http://gems.github.com'
@@ -8,7 +12,7 @@ end
 
 # Github gems
 [
-  'binarylogic-authlogic',
+  'hassox-warden',
   'mislav-will_paginate',
   'thoughtbot-factory_girl',
   'thoughtbot-shoulda',
@@ -16,10 +20,6 @@ end
 ].each do |library|
   github_gem(library)
 end
-
-gem 'haml'
-gem 'less'
-gem 'mocha'
 
 # get all datamapper related gems (assume sqlite3 to be database)
 gem "addressable", :lib => "addressable/uri"
