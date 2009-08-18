@@ -13,7 +13,7 @@ end
 # Github gems
 [
   'hassox-warden',
-  'hassox-rails-warden',
+  'hassox-rails_warden',
   'mislav-will_paginate',
   'thoughtbot-factory_girl',
   'thoughtbot-shoulda',
