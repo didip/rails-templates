@@ -81,11 +81,5 @@ run "rm public/index.html"
 run "rm public/favicon.ico"
 run "rm public/robots.txt"
 
-# Setup Session & AuthLogic
+# Setup Session
 rake('db:sessions:create')
-generate("authlogic", "user session")
-
-# set up git
-git :init
-git :add => '.'
-git :commit => "-a -m 'Initial commit'"
