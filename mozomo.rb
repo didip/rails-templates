@@ -80,6 +80,3 @@ run "rm doc/README_FOR_APP"
 run "rm public/index.html"
 run "rm public/favicon.ico"
 run "rm public/robots.txt"
-
-# Setup Session
-rake('db:sessions:create')
