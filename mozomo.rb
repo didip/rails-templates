@@ -113,6 +113,14 @@ end
   EOF
 end
 
+initializer('requires') do
+  <<-EOF
+Dir[File.join(RAILS_ROOT, 'lib', '*.rb')].each do |f|
+  require f
+end
+  EOF
+end
+
 # integrate HAML to rails
 run "haml --rails ."
 
@@ -121,8 +129,15 @@ run 'rm public/javascripts/*'
 run 'curl http://jqueryjs.googlecode.com/files/jquery-1.3.2.js > public/javascripts/jquery.js'
 
 # Delete unnecessary files
-run "rm README"
-run "rm doc/README_FOR_APP"
-run "rm public/index.html"
-run "rm public/favicon.ico"
-run "rm public/robots.txt"
+def rm_file(file)
+  run "rm #{file}"
+end
+
+[
+  'README',
+  'doc/README_FOR_APP',
+  'public/index.html',
+  'public/favicon.ico',
+  'public/robots.txt'
+].each { |f| rm_file(f) }
+
