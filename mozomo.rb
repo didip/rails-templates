@@ -5,6 +5,7 @@ gem 'rack'
 gem 'haml'
 gem 'less'
 gem 'mocha'
+gem 'bcrypt-ruby'
 
 def github_gem(lib_name)
   gem lib_name, :lib => lib_name.match(/[^-]+-(.*)/)[1], :source => 'http://gems.github.com'
@@ -54,7 +55,7 @@ CODE
 file('app/views/layouts/application.html.haml') do
   <<-EOF
   !!!
-  
+
   %html
     %head
       %title My Mozomo App
@@ -65,6 +66,50 @@ file('app/views/layouts/application.html.haml') do
         = render_flash_messages
         = yield
     = javascript_include_tag 'jquery'
+  EOF
+end
+
+# basic model objects
+file('app/models/user.rb') do
+  <<-EOF
+class User
+  attr_accessor :password, :password_confirmation
+  include DataMapper::Resource
+
+  property :id,         Serial
+  property :email,      String
+  property :encrypted_password, BCryptHash, :nullable => false
+  property :created_at, DateTime
+
+  validates_is_confirmed :password
+
+  def password=(pass)
+    @password = pass
+    self.encrypted_password = pass
+  end
+end
+  EOF
+end
+
+# basic lib objects
+file('app/lib/strategies.rb') do
+  <<-EOF
+Warden::Strategies.add(:bcrypt) do
+  def valid?
+    params[:email] || params[:password]
+  end
+
+  def authenticate!
+    return fail! unless user = User.first(:email => params[:email])
+
+    if user.encrypted_password == params[:password]
+      success!(user)
+    else
+      errors.add(:login, "Email or Password incorrect")
+      fail!
+    end
+  end
+end
   EOF
 end
 
