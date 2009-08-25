@@ -7,7 +7,7 @@ gem 'rack'
 gem 'haml'
 gem 'less'
 gem 'mocha'
-gem 'json_pure'
+gem 'json_pure', :lib => 'json'
 gem 'bcrypt-ruby', :lib => 'bcrypt', :version => '2.0.5'
 gem 'warden'
 gem 'rails_warden'
@@ -39,6 +39,7 @@ plugin "less-for-rails", :git => "git://github.com/augustl/less-for-rails.git"
 plugin "flash-message-conductor", :git => "git://github.com/planetargon/flash-message-conductor.git"
 
 rake "gems:install"
+rake "gems:unpack"
 rake "gems:build"
 
 # install datamapper rake tasks
@@ -94,7 +95,7 @@ end
   EOF
 end
 
-initializers('warden.rb') do
+initializer('warden.rb') do
   <<-EOF
 Rails.configuration.middleware.use RailsWarden::Manager do |manager|
   manager.default_strategies :bcrypt
