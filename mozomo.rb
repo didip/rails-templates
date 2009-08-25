@@ -92,7 +92,7 @@ end
 end
 
 # basic lib objects
-file('app/lib/strategies.rb') do
+file('lib/strategies.rb') do
   <<-EOF
 Warden::Strategies.add(:bcrypt) do
   def valid?
