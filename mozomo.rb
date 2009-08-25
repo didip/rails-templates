@@ -1,20 +1,23 @@
 # mozomo.rb
 # from Didip Kerabat and Quin Hoxie
 
+# run 'gem install hassox-rails_warden'
+
 gem 'rack'
 gem 'haml'
 gem 'less'
 gem 'mocha'
-gem 'bcrypt-ruby'
+gem 'json_pure'
+gem 'bcrypt-ruby', :lib => 'bcrypt', :version => '2.0.5'
+gem 'warden'
+gem 'rails_warden'
 
+# Github gems
 def github_gem(lib_name)
   gem lib_name, :lib => lib_name.match(/[^-]+-(.*)/)[1], :source => 'http://gems.github.com'
 end
 
-# Github gems
 [
-  'hassox-warden',
-  'hassox-rails_warden',
   'mislav-will_paginate',
   'thoughtbot-factory_girl',
   'thoughtbot-shoulda',
@@ -27,16 +30,16 @@ end
 gem "addressable", :lib => "addressable/uri"
 gem "do_sqlite3"
 gem 'dm-validations'
+gem 'dm-types'
 gem 'dm-timestamps'
 gem "datamapper4rail", :lib => 'datamapper4rails' # excuse the typo
-
 
 # Rails plugins
 plugin "less-for-rails", :git => "git://github.com/augustl/less-for-rails.git"
 plugin "flash-message-conductor", :git => "git://github.com/planetargon/flash-message-conductor.git"
 
-
 rake "gems:install"
+rake "gems:build"
 
 # install datamapper rake tasks
 generate("dm_install")
@@ -91,9 +94,16 @@ end
   EOF
 end
 
-# basic lib objects
-file('lib/strategies.rb') do
+initializers('warden.rb') do
   <<-EOF
+Rails.configuration.middleware.use RailsWarden::Manager do |manager|
+  manager.default_strategies :bcrypt
+  manager.failure_app = UserController
+end
+
+Warden::Manager.serialize_into_session{ |user| [user.class, user.id] }
+Warden::Manager.serialize_from_session{ |klass, id| klass.get(id) }
+
 Warden::Strategies.add(:bcrypt) do
   def valid?
     params[:email] || params[:password]
@@ -109,14 +119,6 @@ Warden::Strategies.add(:bcrypt) do
       fail!
     end
   end
-end
-  EOF
-end
-
-initializer('requires') do
-  <<-EOF
-Dir[File.join(RAILS_ROOT, 'lib', '*.rb')].each do |f|
-  require f
 end
   EOF
 end
