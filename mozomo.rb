@@ -8,7 +8,7 @@ gem 'haml'
 gem 'less'
 gem 'mocha'
 gem 'json_pure', :lib => 'json'
-gem 'bcrypt-ruby', :lib => 'bcrypt', :version => '2.0.5'
+gem 'bcrypt-ruby', :lib => 'bcrypt'
 gem 'warden'
 gem 'rails_warden'
 
@@ -57,18 +57,18 @@ CODE
 # basic layout
 file('app/views/layouts/application.html.haml') do
   <<-EOF
-  !!!
+!!!
 
-  %html
-    %head
-      %title My Mozomo App
-      = stylesheet_link_tag 'screen', :media => 'screen, projection'
-      = stylesheet_link_tag 'print', :media => 'print'
-    %body
-      #container
-        = render_flash_messages
-        = yield
-    = javascript_include_tag 'jquery'
+%html
+  %head
+    %title My Mozomo App
+    = stylesheet_link_tag 'screen', :media => 'screen, projection'
+    = stylesheet_link_tag 'print', :media => 'print'
+  %body
+    #container
+      = render_flash_messages
+      = yield
+  = javascript_include_tag 'jquery'
   EOF
 end
 
