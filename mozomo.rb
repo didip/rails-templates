@@ -32,7 +32,6 @@ gem "do_sqlite3"
 gem 'dm-validations'
 gem 'dm-types'
 gem 'dm-timestamps'
-gem "datamapper4rail", :lib => 'datamapper4rails' # excuse the typo
 
 # Rails plugins
 plugin "less-for-rails", :git => "git://github.com/augustl/less-for-rails.git"
